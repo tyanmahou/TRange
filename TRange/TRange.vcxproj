@@ -125,8 +125,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\TRange.hpp" />
+    <ClInclude Include="Include\TRange\Clone.hpp" />
     <ClInclude Include="Include\TRange\Concept.hpp" />
+    <ClInclude Include="Include\TRange\IRange.h" />
     <ClInclude Include="Include\TRange\Query.hpp" />
+    <ClInclude Include="Include\TRange\Reverse.hpp" />
+    <ClInclude Include="Include\TRange\Skip.hpp" />
+    <ClInclude Include="Include\TRange\Util.h" />
+    <ClInclude Include="Include\TRange\WithIndex.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
