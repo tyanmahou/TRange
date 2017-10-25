@@ -45,6 +45,15 @@
     <ClInclude Include="Include\TRange\Skip.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
+    <ClInclude Include="Include\TRange\Take.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\Aggregate.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\Judgement.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

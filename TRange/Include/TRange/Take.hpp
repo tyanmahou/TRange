@@ -8,7 +8,7 @@ namespace trange
 	{
 
 		template<class Range>
-		class SkipRange :public IRange<range_iterator_t<Range>>
+		class TakeRange :public IRange<range_iterator_t<Range>>
 		{
 			using iterator = range_iterator_t<Range>;
 		private:
@@ -16,17 +16,17 @@ namespace trange
 			iterator m_end;
 
 		public:
-			SkipRange(Range&& range, std::size_t num) :
-				m_end(std::end(range))
+			TakeRange(Range&& range, std::size_t num) :
+				m_begin(std::begin(range))
 			{
-				m_begin = std::begin(range);
-				std::advance(m_begin, std::min(num,std::size(range)));
+				m_end = std::begin(range);
+				std::advance(m_end, std::min(num, std::size(range)));
 			}
 			template<class Pred>
-			SkipRange(Range&& range, Pred pred) :
-				m_end(std::end(range))
+			TakeRange(Range&& range, Pred pred) :
+				m_begin(std::begin(range))
 			{
-				m_begin = std::begin(range);
+				m_end = std::begin(range);
 
 				bool skip = false;
 				int num = 0;
@@ -39,7 +39,7 @@ namespace trange
 					++num;
 				}
 
-				std::advance(m_begin, num);
+				std::advance(m_end, num);
 			}
 
 			iterator begin()
@@ -67,7 +67,7 @@ namespace trange
 		};
 	}
 
-	constexpr struct _Skip_OP
+	constexpr struct _Take_OP
 	{
 	private:
 		struct Parm
@@ -76,9 +76,9 @@ namespace trange
 		};
 	public:
 		template<class Range>
-		detail::SkipRange<Range> operator ()(Range&& v, std::size_t num)const
+		detail::TakeRange<Range> operator ()(Range&& v, std::size_t num)const
 		{
-			return detail::SkipRange<Range>(std::forward<Range>(v), num);
+			return detail::TakeRange<Range>(std::forward<Range>(v), num);
 		}
 
 		Parm  operator ()(std::size_t num)const
@@ -87,13 +87,13 @@ namespace trange
 		}
 
 		template<class Range>
-		friend detail::SkipRange<Range> operator -(Range&& v, Parm p)
+		friend detail::TakeRange<Range> operator -(Range&& v, Parm p)
 		{
-			return  detail::SkipRange<Range>(std::forward<Range>(v), p.num);
+			return  detail::TakeRange<Range>(std::forward<Range>(v), p.num);
 		}
-	}skip;
+	}take;
 
-	constexpr struct _SkipWhile_OP
+	constexpr struct _TakeWhile_OP
 	{
 	private:
 		template<class Pred>
@@ -103,9 +103,9 @@ namespace trange
 		};
 	public:
 		template<class Range, class Pred>
-		detail::SkipRange<Range> operator ()(Range&& v, Pred pred)const
+		detail::TakeRange<Range> operator ()(Range&& v, Pred pred)const
 		{
-			return detail::SkipRange<Range>(std::forward<Range>(v), pred);
+			return detail::TakeRange<Range>(std::forward<Range>(v), pred);
 		}
 		template<class Pred>
 		Parm<Pred>  operator ()(Pred pred)const
@@ -114,9 +114,9 @@ namespace trange
 		}
 
 		template<class Range, class Pred>
-		friend detail::SkipRange<Range> operator -(Range&& v, Parm<Pred> p)
+		friend detail::TakeRange<Range> operator -(Range&& v, Parm<Pred> p)
 		{
-			return  detail::SkipRange<Range>(std::forward<Range>(v), p.pred);
+			return  detail::TakeRange<Range>(std::forward<Range>(v), p.pred);
 		}
-	}skipWhile;
+	}takeWhile;
 }
