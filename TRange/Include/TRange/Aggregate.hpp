@@ -2,12 +2,18 @@
 #include<algorithm>
 #include<numeric>
 #include<vector>
+#include"Reverse.hpp"
 namespace trange
 {
 	template<class Range>
-	decltype(auto) max(Range&& range)
+	decltype(auto) max(Range& range)
 	{
 		return *std::max_element(std::begin(range), std::end(range));
+	}
+	template<class Range>
+	auto max(Range&& range)
+	{
+		return max(range);
 	}
 
 	template<class Range>
@@ -15,27 +21,32 @@ namespace trange
 	{
 		return *std::min_element(std::begin(range), std::end(range));
 	}
+	template<class Range>
+	auto min(Range&& range)
+	{
+		return min(range);
+	}
 
 	template<class Range>
-	decltype(auto) sum(const Range& range)
+	auto sum(const Range& range)
 	{
 		return std::accumulate(std::begin(range), std::end(range), 0);
 	}
 
 	template<class Range>
-	decltype(auto) average(const Range& range)
+	auto average(const Range& range)
 	{
 		return trange::sum(range) / static_cast<double>(std::size(range));
 	}
 
 	template<class Range>
-	decltype(auto) count(const Range& range)
+	auto count(const Range& range)
 	{
 		return std::size(range);
 	}
 
 	template<class Range, class Type, class Pred>
-	decltype(auto) aggregate(const Range& range, const Type& init, Pred pred)
+	auto aggregate(const Range& range, const Type& init, Pred pred)
 	{
 		Type result = init;
 		for (auto&& elm : range)
@@ -47,31 +58,54 @@ namespace trange
 
 
 	template<class Range>
-	decltype(auto) product(const Range& range)
+	auto product(const Range& range)
 	{
 		return trange::aggregate(range, 1, [](const auto& l, const auto& r) {return l*r; });
 	}
 
 
-	template<class Type>
-	decltype(auto) elmentAt(std::vector<Type>& range, std::size_t num)
+	template<class Range>
+	decltype(auto) elmentAt(Range& range, std::size_t num)
 	{
-		std::cout << "Vector";
-		return range[num];
+		auto begin = std::begin(range);
+		std::advance(begin, num);
+		return *begin;
 	}
-	template<class Type,int N>
-	decltype(auto) elmentAt(Type(&range)[N], std::size_t num)
+	template<class Range>
+	auto elmentAt(Range&& range, std::size_t num)
 	{
-		return range[num];
+		return elmentAt(range, num);
 	}
-	//template<class Range>
-	//decltype(auto) elmentAt(Range&& range, std::size_t num)
-	//{
-	//	auto it = std::begin(range);
-	//	for (std::size_t i = 0; i < num; ++i, ++it)
-	//	{
-	//	}
-	//	return *it;
-	//}
+	template<class Range, class Pred>
+	decltype(auto) first(Range& range, Pred pred)
+	{
+		return 	*std::find_if(std::begin(range), std::end(range), pred);
+	}
+	template<class Range, class Pred>
+	auto first(Range&& range, Pred pred)
+	{
+		return 	first(range);
+	}
+	template<class Range>
+	decltype(auto) first(Range&& range)
+	{
+		return first(std::forward<Range>(range), _always_true);
+	}
 
+	template<class Range, class Pred>
+	decltype(auto) last(Range& range, Pred pred)
+	{
+		auto r = trange::reverse(range);
+		return 	*std::find_if(std::begin(r), std::end(r), pred);
+	}
+	template<class Range, class Pred>
+	auto last(Range&& range, Pred pred)
+	{
+		return 	last(range, pred);
+	}
+	template<class Range>
+	decltype(auto) last(Range&& range)
+	{
+		return last(std::forward<Range>(range), _always_true);
+	}
 }

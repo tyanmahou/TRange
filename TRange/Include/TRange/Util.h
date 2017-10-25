@@ -22,6 +22,8 @@ namespace trange
 		}
 	}
 
+	const auto _default = [](auto&& v) {return v; };
+	const auto _always_true = [](auto&& v)->bool {return true; };
 
 
 }

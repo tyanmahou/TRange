@@ -12,25 +12,28 @@ namespace trange
 		{
 			using iterator = range_iterator_t<Range>;
 		private:
+			Range m_range;
+
 			iterator m_begin;
 			iterator m_end;
-
 		public:
 			TakeRange(Range&& range, std::size_t num) :
-				m_begin(std::begin(range))
+				m_range(std::forward<Range>(range)),
+				m_begin(std::begin(m_range))
 			{
-				m_end = std::begin(range);
-				std::advance(m_end, std::min(num, std::size(range)));
+				m_end = std::begin(m_range);
+				std::advance(m_end, std::min(num, std::size(m_range)));
 			}
 			template<class Pred>
 			TakeRange(Range&& range, Pred pred) :
-				m_begin(std::begin(range))
+				m_range(std::forward<Range>(range)),
+				m_begin(std::begin(m_range))
 			{
-				m_end = std::begin(range);
+				m_end = std::begin(m_range);
 
 				bool skip = false;
 				int num = 0;
-				for (auto&&elm : range)
+				for (auto&&elm : m_range)
 				{
 					if (!pred(elm))
 					{

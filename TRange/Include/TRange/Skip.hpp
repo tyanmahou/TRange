@@ -12,25 +12,27 @@ namespace trange
 		{
 			using iterator = range_iterator_t<Range>;
 		private:
+			Range m_range;
 			iterator m_begin;
 			iterator m_end;
-
 		public:
 			SkipRange(Range&& range, std::size_t num) :
-				m_end(std::end(range))
+				m_range(std::forward<Range>(range)),
+				m_end(std::end(m_range))
 			{
-				m_begin = std::begin(range);
-				std::advance(m_begin, std::min(num,std::size(range)));
+				m_begin = std::begin(m_range);
+				std::advance(m_begin, std::min(num,std::size(m_range)));
 			}
 			template<class Pred>
 			SkipRange(Range&& range, Pred pred) :
-				m_end(std::end(range))
+				m_range(std::forward<Range>(range)),
+				m_end(std::end(m_range))
 			{
-				m_begin = std::begin(range);
+				m_begin = std::begin(m_range);
 
 				bool skip = false;
 				int num = 0;
-				for (auto&&elm : range)
+				for (auto&&elm : m_range)
 				{
 					if (!pred(elm))
 					{
@@ -76,9 +78,14 @@ namespace trange
 		};
 	public:
 		template<class Range>
-		detail::SkipRange<Range> operator ()(Range&& v, std::size_t num)const
+		auto operator ()(Range&& v, std::size_t num)const
 		{
 			return detail::SkipRange<Range>(std::forward<Range>(v), num);
+		}
+		template<class Type>
+		auto operator ()(std::initializer_list<Type> v, std::size_t num)const
+		{
+			return detail::SkipRange<std::initializer_list<Type>>(std::forward<std::initializer_list<Type>>(v), num);
 		}
 
 		Parm  operator ()(std::size_t num)const
@@ -91,6 +98,7 @@ namespace trange
 		{
 			return  detail::SkipRange<Range>(std::forward<Range>(v), p.num);
 		}
+
 	}skip;
 
 	constexpr struct _SkipWhile_OP
@@ -103,9 +111,15 @@ namespace trange
 		};
 	public:
 		template<class Range, class Pred>
-		detail::SkipRange<Range> operator ()(Range&& v, Pred pred)const
+		auto operator ()(Range&& v, Pred pred)const
 		{
 			return detail::SkipRange<Range>(std::forward<Range>(v), pred);
+		}
+
+		template<class Type,class Pred>
+		auto operator ()(std::initializer_list<Type> v, Pred pred)const
+		{
+			return detail::SkipRange<std::initializer_list<Type>>(std::forward<std::initializer_list<Type>>(v), pred);
 		}
 		template<class Pred>
 		Parm<Pred>  operator ()(Pred pred)const
@@ -114,7 +128,7 @@ namespace trange
 		}
 
 		template<class Range, class Pred>
-		friend detail::SkipRange<Range> operator -(Range&& v, Parm<Pred> p)
+		friend auto operator -(Range&& v, Parm<Pred> p)
 		{
 			return  detail::SkipRange<Range>(std::forward<Range>(v), p.pred);
 		}
