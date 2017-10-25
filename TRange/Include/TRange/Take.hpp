@@ -13,24 +13,16 @@ namespace trange
 			using iterator = range_iterator_t<Range>;
 		private:
 			Range m_range;
-
-			iterator m_begin;
-			iterator m_end;
+			std::size_t m_off;
 		public:
 			TakeRange(Range&& range, std::size_t num) :
 				m_range(std::forward<Range>(range)),
-				m_begin(std::begin(m_range))
-			{
-				m_end = std::begin(m_range);
-				std::advance(m_end, std::min(num, std::size(m_range)));
-			}
+				m_off(std::min(num, std::size(m_range)))
+			{}
 			template<class Pred>
 			TakeRange(Range&& range, Pred pred) :
-				m_range(std::forward<Range>(range)),
-				m_begin(std::begin(m_range))
+				m_range(std::forward<Range>(range))
 			{
-				m_end = std::begin(m_range);
-
 				bool skip = false;
 				int num = 0;
 				for (auto&&elm : m_range)
@@ -42,30 +34,30 @@ namespace trange
 					++num;
 				}
 
-				std::advance(m_end, num);
+				m_off = num;
 			}
 
 			iterator begin()
 			{
-				return m_begin;
+				return std::begin(m_range);
 			}
 
 			iterator end()
 			{
-				return m_end;
+				return advance(std::begin(m_range),m_off);
 			}
 			const_iterator<iterator> begin()const
 			{
-				return m_begin;
+				return std::begin(const_cast<Range&>(m_range));
 			}
 
 			const_iterator<iterator> end()const
 			{
-				return m_end;
+				return advance(std::begin(const_cast<Range&>(m_range)), m_off);
 			}
 			std::size_t size()const override
 			{
-				return trange::detail::size(m_begin, m_end);
+				return trange::detail::size(this->begin(), this->end());
 			}
 		};
 	}

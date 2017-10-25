@@ -1,6 +1,6 @@
 #pragma once
 #include"IRange.hpp"
-#include"ParameterPack.hpp"
+#include"ParameterExpand.hpp"
 #include<vector>
 namespace trange
 {
@@ -8,17 +8,16 @@ namespace trange
 
 	namespace detail
 	{
-		template<class It>
-		class WhereIterator
-		{
-		private:
-			using value_type=decltype(*std::declval<It>());
-		};
+		template<class Range>
+		using value_t = std::conditional_t<
+			std::is_reference<decltype(*std::begin(std::declval<Range&>()))>::value,
+			std::reference_wrapper<range_value_t<Range>>,
+			range_value_t<Range>>;
 
 		template<class Range>
-		using where_refs =std::vector<std::reference_wrapper<range_value_t<Range>>>;
+		using ret_range =std::vector<value_t<Range>>;
 		template<class Range>
-		using where_iterator = typename where_refs<Range>::iterator;
+		using where_iterator = typename ret_range <Range>::iterator;
 
 		template<class Range>
 		class WhereRange :public IRange<trange_iterator<where_iterator<Range>>>
@@ -27,44 +26,44 @@ namespace trange
 			using iterator = where_iterator<Range>;
 		private:
 			Range m_range;
-			where_refs<Range> m_refs;
+			ret_range <Range> m_ret;
 		public:
 			template<class Pred>
 			WhereRange(Range&& range,Pred pred) :
 				m_range(std::forward<Range>(range))
 			{
-				m_refs.reserve(std::size(m_range));
+				m_ret.reserve(std::size(m_range));
 				for (auto&&elm :m_range)
 				{
-					if (parameter_pack(pred,elm))
+					if (param_expand(pred,elm))
 					{
-						m_refs.emplace_back(elm);
+						m_ret.emplace_back(elm);
 					}
 				}
 			}
 
 			trange_iterator<iterator> begin()
 			{
-				return std::begin(m_refs);
+				return std::begin(m_ret);
 			}
 
 			trange_iterator<iterator> end()
 			{
-				return  std::end(m_refs);
+				return  std::end(m_ret);
 			}
 			const_iterator<iterator> begin()const
 			{
-				return iterator{ std::begin(const_cast<where_refs<Range>&>(m_refs)) };
+				return iterator{ std::begin(const_cast<ret_range<Range>&>(m_ret)) };
 			}
 
 			const_iterator<iterator> end()const
 			{
-				return iterator{ std::end(const_cast<where_refs<Range>&>(m_refs)) };
+				return iterator{ std::end(const_cast<ret_range<Range>&>(m_ret)) };
 			}
 
 			std::size_t size()const
 			{
-				return std::size(m_refs);
+				return std::size(m_ret);
 			}
 
 		};

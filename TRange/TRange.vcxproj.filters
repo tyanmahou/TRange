@@ -57,7 +57,10 @@
     <ClInclude Include="Include\TRange\Where.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TRange\ParameterPack.hpp">
+    <ClInclude Include="Include\TRange\ParameterExpand.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\Select.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
   </ItemGroup>

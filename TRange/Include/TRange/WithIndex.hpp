@@ -1,6 +1,7 @@
 #pragma once
 #include"IRange.hpp"
 #include"Util.hpp"
+#include"ParameterExpand.hpp"
 namespace trange
 {
 
@@ -8,14 +9,12 @@ namespace trange
 	{
 		//イテレーター
 		template<class It>
-		class WithIndexIterator :public std::iterator_traits<It>
+		class WithIndexIterator
 		{
 		public:
-			struct value_type
-			{
-				decltype(*std::declval<It>())& value;
-				const std::size_t index;
-			};
+			using iterator_category = std::bidirectional_iterator_tag;
+			using difference_type = std::size_t;
+			using value_type = WithIndexPair<decltype(*std::declval<It>())&>;
 			using pointer = value_type*;
 			using reference = value_type&;
 		private:

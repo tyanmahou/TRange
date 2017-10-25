@@ -28,7 +28,12 @@ namespace trange
 	const auto _default = [](auto&& v) {return v; };
 	const auto _always_true = [](auto&& v)->bool {return true; };
 
-
+	template<class It>
+	It advance(It it,std::size_t offset)
+	{
+		std::advance(it, offset);
+		return it;
+	}
 
 	constexpr struct _AsConst_OP
 	{

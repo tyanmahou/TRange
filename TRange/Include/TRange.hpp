@@ -11,3 +11,8 @@
 
 #include"TRange/Aggregate.hpp"
 #include"TRange/Judgement.hpp"
+
+#include"TRange/Select.hpp"
+
+
+

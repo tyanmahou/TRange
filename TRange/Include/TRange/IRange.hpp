@@ -31,12 +31,16 @@ namespace trange
 		/// 
 		///</summary>
 		template<class Iterator>
-		class trange_iterator : public std::iterator_traits<Iterator>
+		class trange_iterator
 		{
-		private:
+		protected:
 			Iterator m_it;
 		public:
+			using iterator_category = std::bidirectional_iterator_tag;
+			using difference_type = std::size_t;
 			using value_type = value_type_t<Iterator>;
+			using pointer = value_type*;
+			using reference = value_type&;
 			trange_iterator() = default;
 			trange_iterator(const Iterator& it) :
 				m_it(it)
@@ -79,12 +83,17 @@ namespace trange
 		/// constイテレーターにする
 		///</summary>
 		template<class Iterator>
-		class const_iterator : public std::iterator_traits<Iterator>
+		class const_iterator 
 		{
 		private:
 			Iterator m_it;
 		public:
+			using iterator_category = std::bidirectional_iterator_tag;
+			using difference_type = std::size_t;
 			using value_type = value_type_t<Iterator>;
+			using pointer = value_type*;
+			using reference = value_type&;
+
 			const_iterator() = default;
 			const_iterator(const Iterator& it) :
 				m_it(it)
@@ -129,5 +138,7 @@ namespace trange
 			virtual Iterator end() = 0;
 			virtual std::size_t size()const = 0;
 		};
+
 	}//detail
+
 }//trange

@@ -1,6 +1,7 @@
 #pragma once
 #include"IRange.hpp"
 #include"Util.hpp"
+#include"ParameterExpand.hpp"
 namespace trange
 {
 
@@ -13,58 +14,52 @@ namespace trange
 			using iterator = range_iterator_t<Range>;
 		private:
 			Range m_range;
-			iterator m_begin;
-			iterator m_end;
+			std::size_t m_off = 0;
 		public:
 			SkipRange(Range&& range, std::size_t num) :
 				m_range(std::forward<Range>(range)),
-				m_end(std::end(m_range))
-			{
-				m_begin = std::begin(m_range);
-				std::advance(m_begin, std::min(num,std::size(m_range)));
-			}
+				m_off(std::min(num, std::size(range)))
+			{}
 			template<class Pred>
 			SkipRange(Range&& range, Pred pred) :
-				m_range(std::forward<Range>(range)),
-				m_end(std::end(m_range))
+				m_range(std::forward<Range>(range))
 			{
-				m_begin = std::begin(m_range);
 
 				bool skip = false;
 				int num = 0;
 				for (auto&&elm : m_range)
 				{
-					if (!pred(elm))
+					if (!param_expand(pred,elm))
 					{
 						break;
 					}
 					++num;
 				}
 
-				std::advance(m_begin, num);
+				m_off = num;
 			}
 
 			iterator begin()
 			{
-				return m_begin;
+				return advance(std::begin(m_range),m_off);
 			}
 
 			iterator end()
 			{
-				return m_end;
+				return std::end(m_range);
 			}
 			const_iterator<iterator> begin()const
 			{
-				return m_begin;
+				return advance(std::begin(const_cast<Range&>(m_range)), m_off);
 			}
 
 			const_iterator<iterator> end()const
 			{
-				return m_end;
+				return std::end(const_cast<Range&>(m_range));
 			}
 			std::size_t size()const override
 			{
-				return trange::detail::size(m_begin, m_end);
+				return trange::detail::size(this->begin(), this->end());
 			}
 		};
 	}
