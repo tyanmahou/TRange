@@ -1,6 +1,6 @@
 #pragma once
 #include"IRange.hpp"
-#include"Util.hpp"
+#include"ParameterPack.hpp"
 #include<vector>
 namespace trange
 {
@@ -8,13 +8,20 @@ namespace trange
 
 	namespace detail
 	{
+		template<class It>
+		class WhereIterator
+		{
+		private:
+			using value_type=decltype(*std::declval<It>());
+		};
+
 		template<class Range>
 		using where_refs =std::vector<std::reference_wrapper<range_value_t<Range>>>;
 		template<class Range>
 		using where_iterator = typename where_refs<Range>::iterator;
 
 		template<class Range>
-		class WhereRange :public IRange<where_iterator<Range>>
+		class WhereRange :public IRange<trange_iterator<where_iterator<Range>>>
 		{
 		public:
 			using iterator = where_iterator<Range>;
@@ -29,19 +36,19 @@ namespace trange
 				m_refs.reserve(std::size(m_range));
 				for (auto&&elm :m_range)
 				{
-					if (pred(elm))
+					if (parameter_pack(pred,elm))
 					{
 						m_refs.emplace_back(elm);
 					}
 				}
 			}
 
-			iterator begin()
+			trange_iterator<iterator> begin()
 			{
 				return std::begin(m_refs);
 			}
 
-			iterator end()
+			trange_iterator<iterator> end()
 			{
 				return  std::end(m_refs);
 			}

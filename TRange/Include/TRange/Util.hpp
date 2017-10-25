@@ -11,6 +11,9 @@ namespace trange
 		template<class Range>
 		using range_iterator_t = decltype(std::begin(std::declval<Range&>()));
 
+		template<class Range>
+		using range_const_iterator_t = decltype(std::cbegin(std::declval<Range&>()));
+
 		template<class It>
 		std::size_t size(It begin, It end)
 		{
@@ -30,14 +33,19 @@ namespace trange
 	constexpr struct _AsConst_OP
 	{
 		template<class Range>
+		const Range& operator()(Range& range)
+		{
+			return range;
+		}
+		template<class Range>
 		const Range operator()(Range&& range)
 		{
 			return range;
 		}
 		template<class Range>
-		friend const Range operator -(Range&& range, _AsConst_OP)
+		friend decltype(auto) operator -(Range&& range, _AsConst_OP op)
 		{
-			return range;
+			return op(std::forward<Range>(range));
 		}
 	}asConst;
 	

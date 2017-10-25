@@ -57,6 +57,9 @@
     <ClInclude Include="Include\TRange\Where.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
+    <ClInclude Include="Include\TRange\ParameterPack.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

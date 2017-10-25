@@ -1,6 +1,6 @@
 #pragma once
 #include"IRange.hpp"
-
+#include"Util.hpp"
 namespace trange
 {
 
@@ -11,7 +11,7 @@ namespace trange
 		class WithIndexIterator :public std::iterator_traits<It>
 		{
 		public:
-			using value_type = struct
+			struct value_type
 			{
 				decltype(*std::declval<It>())& value;
 				const std::size_t index;
@@ -58,12 +58,15 @@ namespace trange
 
 		};
 
-		template<class Range, bool isConst = false>
+		template<class Range>
 		class WithIndexRange
 		{
-			using iterator = std::conditional_t<isConst,
-				decltype(std::cbegin(std::declval<Range&>())),
-				decltype(std::begin(std::declval<Range&>()))>;
+			using _iterator = range_iterator_t<Range>;
+			using iterator = WithIndexIterator<_iterator>;
+
+			using _const_iterator = range_const_iterator_t<const Range>;
+			using const_iterator = WithIndexIterator<_const_iterator>;
+
 		private:
 			Range m_range;
 		public:
@@ -72,22 +75,22 @@ namespace trange
 				m_range(std::forward<Range>(range))
 			{}
 
-			WithIndexIterator<iterator> begin()
+			iterator begin()
 			{
 				return { std::begin(m_range),0 };
 			}
-			WithIndexIterator<iterator> end()
+			iterator end()
 			{
 				return { std::end(m_range) , std::size(m_range) };
 			}
 
-			const_iterator<WithIndexIterator<iterator>> begin()const
+			detail::const_iterator<const_iterator> begin()const
 			{
-				return { std::begin(m_range),0 };
+				return const_iterator{ std::begin(m_range),0 };
 			}
-			const_iterator<WithIndexIterator<iterator>> end()const
+			detail::const_iterator<const_iterator> end()const
 			{
-				return { std::end(m_range) , std::size(m_range) };
+				return const_iterator{ std::end(m_range) , std::size(m_range) };
 			}
 
 			std::size_t size()const
@@ -107,17 +110,5 @@ namespace trange
 			return detail::WithIndexRange<Range>(std::forward<Range>(v));
 		}
 	}withIndex;
-
-	//“Y‚¦Žš•t‚« ’lconst
-	constexpr struct _WithIndexConst_OP
-	{
-
-		template<class Range>
-		friend detail::WithIndexRange<Range, true> operator -(Range&& v, _WithIndexConst_OP)
-		{
-			return detail::WithIndexRange<Range, true>(std::forward<Range>(v));
-		}
-
-	}withIndexConst;
 
 }

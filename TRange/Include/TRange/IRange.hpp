@@ -26,6 +26,55 @@ namespace trange
 
 		template<class It>
 		using value_type_t = typename value_type<typename std::iterator_traits<It>::value_type>::type;
+
+		///<summary>
+		/// 
+		///</summary>
+		template<class Iterator>
+		class trange_iterator : public std::iterator_traits<Iterator>
+		{
+		private:
+			Iterator m_it;
+		public:
+			using value_type = value_type_t<Iterator>;
+			trange_iterator() = default;
+			trange_iterator(const Iterator& it) :
+				m_it(it)
+			{}
+			trange_iterator(const trange_iterator& other) :
+				m_it(other.m_it)
+			{}
+
+			value_type& operator *()const
+			{
+				return *m_it;
+			}
+			value_type* operator ->()const
+			{
+				return &(*m_it);
+			}
+			trange_iterator& operator ++()
+			{
+				++m_it;
+				return *this;
+			}
+			trange_iterator& operator --()
+			{
+				--m_it;
+				return *this;
+			}
+			bool operator ==(const trange_iterator& other)const
+			{
+				return m_it == other.m_it;
+			}
+			bool operator !=(const trange_iterator& other)const
+			{
+				return m_it != other.m_it;
+			}
+		};
+
+
+
 		///<summary>
 		/// constイテレーターにする
 		///</summary>
