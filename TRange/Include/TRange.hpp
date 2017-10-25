@@ -6,7 +6,7 @@
 
 #include"TRange/Skip.hpp"
 #include"TRange/Take.hpp"
-
+#include"TRange/Where.hpp"
 #include"TRange/Reverse.hpp"
 
 #include"TRange/Aggregate.hpp"

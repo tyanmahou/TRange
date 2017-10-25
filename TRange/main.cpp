@@ -14,16 +14,18 @@ int main()
 		{"2","Two"}
 	};
 	int ar[] = { 1,2,3 };
-	for (auto&& elm : clone(v)-skip(1))
+
+	auto p = v - where([](const int& a) {return a % 2 == 0; });
+	for (auto&&[elm,i] : p-trange::withIndexConst)
 	{
-		std::cout << ++elm<<std::endl;
+		std::cout << elm<<std::endl;
+		//elm++;
 	}
 	std::cout << "--------------" << std::endl;
 	for (auto&& elm : v)
 	{
-		std::cout << elm;
+		std::cout << elm<<std::endl;
 	}
-
 
 }
 

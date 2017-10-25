@@ -1,5 +1,5 @@
 #pragma once
-#include"IRange.h"
+#include"IRange.hpp"
 
 namespace trange
 {
@@ -106,7 +106,7 @@ namespace trange
 		{
 			return detail::WithIndexRange<Range>(std::forward<Range>(v));
 		}
-	}with_index;
+	}withIndex;
 
 	//“Y‚¦Žš•t‚« ’lconst
 	constexpr struct _WithIndexConst_OP
@@ -118,6 +118,6 @@ namespace trange
 			return detail::WithIndexRange<Range, true>(std::forward<Range>(v));
 		}
 
-	}with_index_const;
+	}withIndexConst;
 
 }

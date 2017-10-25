@@ -5,6 +5,27 @@ namespace trange
 
 	namespace detail
 	{
+		template<class Type>
+		struct value_type
+		{
+		public:
+			using type = Type;
+		};
+		template<class Type>
+		struct value_type<std::reference_wrapper<Type>>
+		{
+		public:
+			using type = Type;
+		};
+		template<class Type>
+		struct value_type<std::reference_wrapper<const Type>>
+		{
+		public:
+			using type = Type;
+		};
+
+		template<class It>
+		using value_type_t = typename value_type<typename std::iterator_traits<It>::value_type>::type;
 		///<summary>
 		/// constイテレーターにする
 		///</summary>
@@ -14,6 +35,7 @@ namespace trange
 		private:
 			Iterator m_it;
 		public:
+			using value_type = value_type_t<Iterator>;
 			const_iterator() = default;
 			const_iterator(const Iterator& it) :
 				m_it(it)
@@ -22,11 +44,11 @@ namespace trange
 				m_it(other.m_it)
 			{}
 
-			const typename std::iterator_traits<Iterator>::value_type& operator *()const
+			const value_type& operator *()const
 			{
 				return *m_it;
 			}
-			const typename std::iterator_traits<Iterator>::value_type* operator ->()const
+			const value_type* operator ->()const
 			{
 				return &(*m_it);
 			}
@@ -48,8 +70,6 @@ namespace trange
 			{
 				return m_it != other.m_it;
 			}
-
-
 		};
 
 		template<class Iterator>

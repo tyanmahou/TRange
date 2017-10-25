@@ -1,6 +1,6 @@
 #pragma once
-#include"IRange.h"
-#include"Util.h"
+#include"IRange.hpp"
+#include"Util.hpp"
 namespace trange
 {
 

@@ -26,4 +26,19 @@ namespace trange
 	const auto _always_true = [](auto&& v)->bool {return true; };
 
 
+
+	constexpr struct _AsConst_OP
+	{
+		template<class Range>
+		const Range operator()(Range&& range)
+		{
+			return range;
+		}
+		template<class Range>
+		friend const Range operator -(Range&& range, _AsConst_OP)
+		{
+			return range;
+		}
+	}asConst;
+	
 }

@@ -36,12 +36,6 @@
     <ClInclude Include="Include\TRange\Clone.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TRange\IRange.h">
-      <Filter>ヘッダー ファイル\TRange</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\TRange\Util.h">
-      <Filter>ヘッダー ファイル\TRange</Filter>
-    </ClInclude>
     <ClInclude Include="Include\TRange\Skip.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
@@ -52,6 +46,15 @@
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
     <ClInclude Include="Include\TRange\Judgement.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\IRange.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\Util.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\Where.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
   </ItemGroup>
