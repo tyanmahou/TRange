@@ -24,9 +24,6 @@
     <ClInclude Include="Include\TRange\Concept.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TRange\Query.hpp">
-      <Filter>ヘッダー ファイル\TRange</Filter>
-    </ClInclude>
     <ClInclude Include="Include\TRange\WithIndex.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
@@ -61,6 +58,9 @@
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
     <ClInclude Include="Include\TRange\Select.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\Zip.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
   </ItemGroup>

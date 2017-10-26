@@ -131,7 +131,6 @@
     <ClInclude Include="Include\TRange\IRange.hpp" />
     <ClInclude Include="Include\TRange\Judgement.hpp" />
     <ClInclude Include="Include\TRange\ParameterExpand.hpp" />
-    <ClInclude Include="Include\TRange\Query.hpp" />
     <ClInclude Include="Include\TRange\Reverse.hpp" />
     <ClInclude Include="Include\TRange\Select.hpp" />
     <ClInclude Include="Include\TRange\Skip.hpp" />
@@ -139,6 +138,7 @@
     <ClInclude Include="Include\TRange\Util.hpp" />
     <ClInclude Include="Include\TRange\Where.hpp" />
     <ClInclude Include="Include\TRange\WithIndex.hpp" />
+    <ClInclude Include="Include\TRange\Zip.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

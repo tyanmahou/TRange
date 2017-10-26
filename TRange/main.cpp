@@ -3,7 +3,7 @@
 #include<Trange.hpp>
 #include<vector>
 #include<unordered_map>
-#include<Trange/Query.hpp>
+#include<Trange/experiment/Query.hpp>
 
 struct A
 {
@@ -24,16 +24,17 @@ int main()
 		{2,"One"},
 		{132,"Two"}
 	};
-	int ar[] = { 1,2,3 };
-	for (auto&& elm : std::vector<int>{ 1,2,3 } -select([](const int& a) {return a+114514; }))
+	int ar[] = { 12,23,34 };
+	for (auto&& elm : zip(v, ar, [](auto& x) {x.first+=10;return x;}))
 	{
 		
-		std::cout << elm<< std::endl;
+		std::cout << elm.second<< std::endl;
 	}
 	std::cout << "--------------" << std::endl;
-	for (auto&& elm : a)
+	for (auto&& elm : ar)
 	{
-		std::cout << elm.age<<elm.name.c_str() << std::endl;
+		std::cout << elm << std::endl;
+		//std::cout << elm.age<<elm.name.c_str() << std::endl;
 	}
 
 }

@@ -4,7 +4,7 @@
 #include<numeric>
 #include<functional>
 #include<unordered_map>
-#include"Concept.hpp"
+#include"../Concept.hpp"
 namespace query
 {
 
