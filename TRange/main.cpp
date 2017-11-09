@@ -4,7 +4,6 @@
 #include<vector>
 #include<unordered_map>
 #include<Trange/experiment/Query.hpp>
-
 struct A
 {
 	std::string name;
@@ -29,17 +28,17 @@ int main()
 	int ar[] = { 12,23,34 };
 	auto aa = map - where([](int i,std::string s){return i>=2; }) ;
 	std::cout << aa.size() << std::endl;
-	for (auto&& elm : aa)
+	
+	for (auto&& elm : a - selectMany([](auto&& v)->decltype(auto) {return v.name;}))
 	{
-		elm.first += 100;
-		std::cout << elm.first<< std::endl;
+		std::cout << elm<< std::endl;
+		elm += 1;
 	}
 	std::cout << "--------------" << std::endl;
-	for (auto&& elm : map)
+	for (auto&& elm : a)
 	{
-		std::cout << elm.first << std::endl;
+		std::cout << elm.name.c_str() << std::endl;
 		//std::cout << elm.age<<elm.name.c_str() << std::endl;
 	}
-
 }
 

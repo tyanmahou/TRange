@@ -63,6 +63,9 @@
     <ClInclude Include="Include\TRange\BaseIterator.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
+    <ClInclude Include="Include\TRange\SelectMany.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

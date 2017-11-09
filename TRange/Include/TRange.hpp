@@ -13,6 +13,7 @@
 #include"TRange/Judgement.hpp"
 
 #include"TRange/Select.hpp"
+#include"TRange/SelectMany.hpp"
 
 #include"TRange/Zip.hpp"
 

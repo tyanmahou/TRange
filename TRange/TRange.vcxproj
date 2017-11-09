@@ -145,6 +145,7 @@
     <ClInclude Include="Include\TRange\ParameterExpand.hpp" />
     <ClInclude Include="Include\TRange\Reverse.hpp" />
     <ClInclude Include="Include\TRange\Select.hpp" />
+    <ClInclude Include="Include\TRange\SelectMany.hpp" />
     <ClInclude Include="Include\TRange\Skip.hpp" />
     <ClInclude Include="Include\TRange\Take.hpp" />
     <ClInclude Include="Include\TRange\Util.hpp" />
