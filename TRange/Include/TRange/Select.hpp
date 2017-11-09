@@ -1,5 +1,5 @@
 #pragma once
-#include"IRange.hpp"
+#include"BaseIterator.hpp"
 #include"Util.hpp"
 #include"ParameterExpand.hpp"
 namespace trange
@@ -7,7 +7,7 @@ namespace trange
 	namespace detail
 	{
 		template<class It, class Pred>
-		class SelectIterator : public trange_iterator<It>
+		class SelectIterator : public base_iterator<It>
 		{
 		private:
 			Pred m_pred;
@@ -15,7 +15,7 @@ namespace trange
 			using value_type = 
 				decltype(param_expand(std::declval<Pred>(), *std::declval<It>()));
 			SelectIterator(It it,Pred pred):
-				trange_iterator<It>(it),
+				base_iterator<It>(it),
 				m_pred(pred)
 			{}
 
@@ -26,14 +26,15 @@ namespace trange
 
 		};
 		template<class Range, class Pred>
-		class SelectRange :public IRange<SelectIterator<range_iterator_t<Range>,Pred>>
+		class SelectRange
 		{
+		public:
+			using iterator = SelectIterator<range_iterator_t<Range>, Pred>;
+			using const_iterator = SelectIterator<range_const_iterator_t<Range>, Pred>;
 		private:
 			Range m_range;
 			Pred m_pred;
 		public:
-			using iterator = SelectIterator<range_iterator_t<Range>, Pred>;
-
 			SelectRange(Range&& range, Pred pred) :
 				m_range(range),
 				m_pred(pred)
@@ -46,16 +47,16 @@ namespace trange
 			{
 				return { std::end(m_range),m_pred };
 			}
-			const_iterator<iterator> begin()const
+			const_iterator begin()const
 			{
-				return iterator{ std::begin(const_cast<Range&>(m_range)),m_pred };
+				return { std::begin(m_range),m_pred };
 			}
-			const_iterator<iterator> end()const
+			const_iterator end()const
 			{
-				return iterator{ std::end(const_cast<Range&>(m_range)),m_pred };
+				return { std::end(m_range),m_pred };
 			}
 
-			std::size_t size()const override
+			std::size_t size()const
 			{
 				return std::size(m_range);
 			}

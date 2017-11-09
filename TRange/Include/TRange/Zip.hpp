@@ -56,7 +56,7 @@ namespace trange
 		};
 
 		template<class Range1, class Range2>
-		class ZipRange :IRange<ZipIterator<range_iterator_t<Range1>, range_iterator_t<Range2>>>
+		class ZipRange
 		{
 		private:
 			Range1 m_range1;
@@ -77,22 +77,16 @@ namespace trange
 			{
 				return { std::end(m_range1),std::end(m_range2)};
 			}
-			detail::const_iterator<const_iterator> begin()const
+			const_iterator begin()const
 			{
-				return const_iterator{
-					std::begin(const_cast<Range1&>(m_range1)),
-					std::begin(const_cast<Range2&>(m_range2))
-				};
+				return { std::begin(m_range1),std::begin(m_range2) };
 			}
-			detail::const_iterator<const_iterator> end()const
+			const_iterator end()const
 			{
-				return const_iterator{
-					std::end(const_cast<Range1&>(m_range1)),
-					std::end(const_cast<Range2&>(m_range2))
-				};
+				return { std::end(m_range1),std::end(m_range2) };
 			}
 
-			std::size_t size()const override
+			std::size_t size()const
 			{
 				return trange::detail::size(this->begin(),this->end());
 			}

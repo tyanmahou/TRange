@@ -1,5 +1,4 @@
 #pragma once
-#include"IRange.hpp"
 #include"Util.hpp"
 #include"ParameterExpand.hpp"
 namespace trange
@@ -9,9 +8,11 @@ namespace trange
 	{
 
 		template<class Range>
-		class SkipRange :public IRange<range_iterator_t<Range>>
+		class SkipRange
 		{
+		public:
 			using iterator = range_iterator_t<Range>;
+			using const_iterator = range_const_iterator_t<Range>;
 		private:
 			Range m_range;
 			std::size_t m_off = 0;
@@ -48,16 +49,16 @@ namespace trange
 			{
 				return std::end(m_range);
 			}
-			const_iterator<iterator> begin()const
+			const_iterator begin()const
 			{
-				return advance(std::begin(const_cast<Range&>(m_range)), m_off);
+				return advance(std::begin(m_range), m_off);
 			}
 
-			const_iterator<iterator> end()const
+			const_iterator end()const
 			{
-				return std::end(const_cast<Range&>(m_range));
+				return std::end(m_range);
 			}
-			std::size_t size()const override
+			std::size_t size()const
 			{
 				return trange::detail::size(this->begin(), this->end());
 			}

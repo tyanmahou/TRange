@@ -1,74 +1,95 @@
 #pragma once
-#include"IRange.hpp"
+#include"BaseIterator.hpp"
 #include"ParameterExpand.hpp"
 #include<vector>
 namespace trange
 {
-
-
 	namespace detail
 	{
-		template<class Range>
-		using value_t = std::conditional_t<
-			std::is_reference<decltype(*std::begin(std::declval<Range&>()))>::value,
-			std::reference_wrapper<range_value_t<Range>>,
-			range_value_t<Range>>;
 
-		template<class Range>
-		using ret_range =std::vector<value_t<Range>>;
-		template<class Range>
-		using where_iterator = typename ret_range <Range>::iterator;
+		template<class It, class Pred>
+		class WhereIterator :public base_iterator<It>
+		{
+		private:
+			const Pred m_pred;
+			const It m_begin;
+			const It m_end;
+		public:
+			template<class Range>
+			WhereIterator(It it,Range&& range, Pred pred) :
+				base_iterator<It>(it),
+				m_begin(std::begin(range)),
+				m_end(std::end(range)),
+				m_pred(pred)
+			{}
 
-		template<class Range>
-		class WhereRange :public IRange<trange_iterator<where_iterator<Range>>>
+			decltype(auto) operator++()
+			{
+				do
+				{
+					++m_it;
+					if (m_it == m_end)
+						break;
+				} while (!param_expand(m_pred, *(m_it)));
+
+				return *this;
+			}
+			decltype(auto) operator--()
+			{
+				do
+				{
+					--m_it;
+					if (m_it == m_begin)
+						break;
+				} while (!param_expand(m_pred, *(m_it)));
+				return *this;
+			}
+		};
+
+		template<class Range, class Pred>
+		class WhereRange
 		{
 		public:
-			using iterator = where_iterator<Range>;
+			using iterator = WhereIterator<range_iterator_t<Range>, Pred>;
+			using const_iterator = WhereIterator<range_const_iterator_t<Range>, Pred>;
 		private:
 			Range m_range;
-			ret_range <Range> m_ret;
+			Pred m_pred;
 		public:
-			template<class Pred>
-			WhereRange(Range&& range,Pred pred) :
-				m_range(std::forward<Range>(range))
+			WhereRange(Range&& range, Pred pred) :
+				m_range(std::forward<Range>(range)),
+				m_pred(pred)
+			{}
+
+			iterator begin()
 			{
-				m_ret.reserve(std::size(m_range));
-				for (auto&&elm :m_range)
-				{
-					if (param_expand(pred,elm))
-					{
-						m_ret.emplace_back(elm);
-					}
-				}
+				auto it = std::find_if(std::begin(m_range), std::end(m_range), [this](auto&& v) {return param_expand(m_pred,v); });
+				return { it,m_range,m_pred };
 			}
 
-			trange_iterator<iterator> begin()
+			iterator end()
 			{
-				return std::begin(m_ret);
+				return { std::end(m_range),m_range,m_pred };
+			}
+			const_iterator begin()const
+			{
+				auto it = std::find_if(std::begin(m_range), std::end(m_range), [this](auto&& v) {return param_expand(m_pred, v); });
+				return { it,m_range,m_pred };
 			}
 
-			trange_iterator<iterator> end()
+			const_iterator end()const
 			{
-				return  std::end(m_ret);
-			}
-			const_iterator<iterator> begin()const
-			{
-				return iterator{ std::begin(const_cast<ret_range<Range>&>(m_ret)) };
-			}
-
-			const_iterator<iterator> end()const
-			{
-				return iterator{ std::end(const_cast<ret_range<Range>&>(m_ret)) };
+				return { std::end(m_range),m_range,m_pred };
 			}
 
 			std::size_t size()const
 			{
-				return std::size(m_ret);
+				return trange::detail::size(this->begin(), this->end());
 			}
 
 		};
-
 	}
+
 	constexpr struct _Where_OP
 	{
 	private:
@@ -81,13 +102,13 @@ namespace trange
 		template<class Range, class Pred>
 		auto operator ()(Range&& v, Pred pred)const
 		{
-			return detail::WhereRange<Range>(std::forward<Range>(v), pred);
+			return detail::WhereRange<Range,Pred>(std::forward<Range>(v), pred);
 		}
 
 		template<class Type, class Pred>
 		auto operator ()(std::initializer_list<Type> v, Pred pred)const
 		{
-			return detail::WhereRange<std::initializer_list<Type>>(std::forward<std::initializer_list<Type>>(v), pred);
+			return detail::WhereRange<std::initializer_list<Type>,Pred>(std::forward<std::initializer_list<Type>>(v), pred);
 		}
 		template<class Pred>
 		Parm<Pred>  operator ()(Pred pred)const
@@ -98,7 +119,7 @@ namespace trange
 		template<class Range, class Pred>
 		friend auto operator -(Range&& v, Parm<Pred> p)
 		{
-			return  detail::WhereRange<Range>(std::forward<Range>(v), p.pred);
+			return  detail::WhereRange<Range,Pred>(std::forward<Range>(v), p.pred);
 		}
 	}where;
 

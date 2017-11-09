@@ -19,21 +19,25 @@ int main()
 		{ "C++",16}
 	};
 
-	std::vector<int> v{ 1,2,3 ,4 ,5,6,7};
+	std::vector<int> v{ 4,2,3 ,4 ,5,6,7};
 	std::vector<std::pair<int, std::string>> map{
 		{2,"One"},
-		{132,"Two"}
+		{132,"Two"},
+		{ 2,"Three" },
+		{ 342,"Four" }
 	};
 	int ar[] = { 12,23,34 };
-	for (auto&& elm : zip(v, ar, [](auto& x) {x.first+=10;return x;}))
+	auto aa = map - where([](int i,std::string s){return i>=2; }) ;
+	std::cout << aa.size() << std::endl;
+	for (auto&& elm : aa)
 	{
-		
-		std::cout << elm.second<< std::endl;
+		elm.first += 100;
+		std::cout << elm.first<< std::endl;
 	}
 	std::cout << "--------------" << std::endl;
-	for (auto&& elm : ar)
+	for (auto&& elm : map)
 	{
-		std::cout << elm << std::endl;
+		std::cout << elm.first << std::endl;
 		//std::cout << elm.age<<elm.name.c_str() << std::endl;
 	}
 

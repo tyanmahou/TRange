@@ -1,16 +1,15 @@
 #pragma once
-#include"IRange.hpp"
 #include"Util.hpp"
 namespace trange
 {
 	namespace detail
 	{
 		template<class Range>
-		class ReverseRange : public IRange<std::reverse_iterator<range_iterator_t<Range>>>
+		class ReverseRange
 		{
-			using reverse_iterator = range_iterator_t<Range>;
-			using iterator = std::reverse_iterator<reverse_iterator>;
-
+		public:
+			using iterator = std::reverse_iterator<range_iterator_t<Range>>;
+			using const_iterator = std::reverse_iterator<range_const_iterator_t<Range>>;
 		private:
 			Range m_range;
 		public:
@@ -18,24 +17,24 @@ namespace trange
 				m_range(std::forward<Range>(range))
 			{}
 
-			iterator begin()override
+			iterator begin()
 			{
 				return iterator{ std::end(m_range) };
 			}
-			iterator end()override
+			iterator end()
 			{
 				return iterator{ std::begin(m_range) };
 			}
 
-			const_iterator<iterator> begin()const
+			const_iterator begin()const
 			{
-				return iterator{ std::end(m_range) };
+				return const_iterator{ std::end(m_range) };
 			}
-			const_iterator<iterator> end()const
+			const_iterator end()const
 			{
-				return iterator{ std::begin(m_range) };
+				return const_iterator{ std::begin(m_range) };
 			}
-			std::size_t size()const override
+			std::size_t size()const
 			{
 				return std::size(m_range);
 			}
@@ -53,9 +52,9 @@ namespace trange
 		}
 
 		template<class Range>
-		friend detail::ReverseRange<Range> operator -(Range&& v, _Reverse_OP)
+		friend auto operator -(Range&& v, _Reverse_OP op)
 		{
-			return detail::ReverseRange<Range>(std::forward<Range>(v));
+			return op(std::forward<Range>(v));
 		}
 
 	}reverse;

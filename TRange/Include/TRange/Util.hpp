@@ -34,24 +34,4 @@ namespace trange
 		std::advance(it, offset);
 		return it;
 	}
-
-	constexpr struct _AsConst_OP
-	{
-		template<class Range>
-		const Range& operator()(Range& range)
-		{
-			return range;
-		}
-		template<class Range>
-		const Range operator()(Range&& range)
-		{
-			return range;
-		}
-		template<class Range>
-		friend decltype(auto) operator -(Range&& range, _AsConst_OP op)
-		{
-			return op(std::forward<Range>(range));
-		}
-	}asConst;
-	
 }

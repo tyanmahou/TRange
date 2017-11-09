@@ -22,14 +22,14 @@ namespace trange
 
 		//pair
 		template<class Func, class F, class S>
-		auto param_expand_impl(Func func, std::pair<F, S>& pair)->std::invoke_result_t<Func, F, S>
+		auto param_expand_impl(Func func,std::pair<F, S> pair)->std::invoke_result_t<Func, F, S>
 		{
 			return func(pair.first, pair.second);
 		}
 
 		//withIndex
 		template<class Func, class Type>
-		auto param_expand_impl(Func func, WithIndexPair<Type>& pair)->std::invoke_result_t<Func, Type, std::size_t>
+		auto param_expand_impl(Func func, WithIndexPair<Type> pair)->std::invoke_result_t<Func, Type, std::size_t>
 		{
 			return func(pair.value, pair.index);
 		}

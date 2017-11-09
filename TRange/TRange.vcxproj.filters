@@ -45,9 +45,6 @@
     <ClInclude Include="Include\TRange\Judgement.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
-    <ClInclude Include="Include\TRange\IRange.hpp">
-      <Filter>ヘッダー ファイル\TRange</Filter>
-    </ClInclude>
     <ClInclude Include="Include\TRange\Util.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
@@ -61,6 +58,9 @@
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
     <ClInclude Include="Include\TRange\Zip.hpp">
+      <Filter>ヘッダー ファイル\TRange</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\TRange\BaseIterator.hpp">
       <Filter>ヘッダー ファイル\TRange</Filter>
     </ClInclude>
   </ItemGroup>
